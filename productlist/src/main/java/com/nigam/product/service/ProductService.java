@@ -4,6 +4,7 @@ import com.nigam.product.dto.ProductDTO;
 import com.nigam.product.dto.CategoryDTO;
 import com.nigam.product.entity.Category;
 import com.nigam.product.entity.Product;
+import com.nigam.product.exception.CategoryNotFoundException;
 import com.nigam.product.mapper.ProductMapper;
 import com.nigam.product.mapper.CategoryMapper;
 import com.nigam.product.repository.CategoryRepository;
@@ -25,7 +26,8 @@ public class ProductService {
     public ProductDTO createProduct(ProductDTO productDTO) {
         // Fetch the category
         Category category = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category id "
+                        + productDTO.getCategoryId() + " not found!"));
 
         // Map DTO → Entity
         Product product = ProductMapper.toProductEntity(productDTO, category);

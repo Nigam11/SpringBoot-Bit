@@ -2,6 +2,7 @@ package com.nigam.product.service;
 
 import com.nigam.product.dto.CategoryDTO;
 import com.nigam.product.entity.Category;
+import com.nigam.product.exception.CategoryAlreadyExistsException;
 import com.nigam.product.mapper.CategoryMapper;
 import com.nigam.product.repository.CategoryRepository;
 
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,11 @@ public class CategoryService {
      * Create a new category.
      */
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDTO. getName ());
+        if(optionalCategory.isPresent()){
+            throw new CategoryAlreadyExistsException("Category "
+                    + categoryDTO. getName() +" already exists!");
+        }
         // Convert DTO → Entity
         Category category = CategoryMapper.toCategoryEntity(categoryDTO);
 

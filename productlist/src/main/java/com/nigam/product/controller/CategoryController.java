@@ -1,5 +1,6 @@
 package com.nigam.product.controller;
 
+import com.nigam.product.exception.CategoryAlreadyExistsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
 @RequestMapping("/api/category")
 @AllArgsConstructor
@@ -19,8 +22,12 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
-        return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.CREATED);
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
+
+            CategoryDTO savedCategory = categoryService. createCategory (categoryDTO) ;
+            return ResponseEntity.status(HttpStatus.CREATED) .body (savedCategory);
+
+        //return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
